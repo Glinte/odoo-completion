@@ -65,3 +65,50 @@ def test_tokenizer_does_not_execute():
         ["odoo-bin", "--logfile", "$(touch /tmp/no)"],
         "",
     )
+
+
+def test_method_only_selectors(schema, tmp_path):
+    assert "/sale.test_total" in values(schema, "--test-tags /sale.test_", tmp_path)
+    assert "standard.test_total" in values(schema, "--test-tags standard.test_", tmp_path)
+
+
+def test_addon_commands_follow_effective_paths(schema, tmp_path):
+    schema["commands"]["custom"] = {
+        "options": [],
+        "positionals": [],
+        "children": {},
+        "help": "Custom",
+    }
+    extra = tmp_path / "extra"
+    schema["command_sources"] = {"custom": str(extra / "module/cli/custom.py")}
+    assert "custom" not in values(schema, "cu", tmp_path)
+    assert "custom" in values(schema, f"--addons-path={extra} cu", tmp_path)
+
+
+def test_bash_preserves_existing_suffix(schema, tmp_path, monkeypatch):
+    from odoo_completion.engine import complete_line
+
+    monkeypatch.setattr("odoo_completion.engine.load_schema", lambda _: schema)
+    line = "odoo-bin --log-level=dbug"
+    result = complete_line(line, len(line) - 3, str(tmp_path), "bash", "dbug")
+    assert result[0]["value"] == "de"
+    assert result[0]["kind"] == "nospace"
+    incompatible = "odoo-bin --log-level=deb"
+    assert complete_line(incompatible, len(incompatible) - 2, str(tmp_path), "bash", "deb") == []
+
+
+def test_bash_empty_value_after_wordbreak(schema, tmp_path, monkeypatch):
+    from odoo_completion.engine import complete_line
+
+    monkeypatch.setattr("odoo_completion.engine.load_schema", lambda _: schema)
+    line = "odoo-bin --log-level="
+    result = complete_line(line, len(line), str(tmp_path), "bash", "=")
+    assert {item["value"] for item in result} == {"debug", "info", "warn"}
+
+
+def test_mutually_exclusive_options_are_not_offered(schema, tmp_path):
+    level = next(
+        item for item in schema["commands"]["server"]["options"] if item["dest"] == "log_level"
+    )
+    level["exclusive_with"] = ["dev_mode"]
+    assert "--log-level" not in values(schema, "--dev xml --log-", tmp_path)

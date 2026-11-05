@@ -1,6 +1,7 @@
 """Refresh-time source indexes. No addon imports or manifest evaluation."""
 
 import ast
+import csv
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -14,7 +15,7 @@ class TestClass:
     file: str
     name: str
     methods: set[str] = field(default_factory=set)
-    tags: set[str] = field(default_factory=lambda: {"standard", "at_install"})
+    tags: set[str] = field(default_factory=set)
     bases: list[str] = field(default_factory=list)
     removed_tags: set[str] = field(default_factory=set)
 
@@ -100,16 +101,20 @@ def resolve_inheritance(tests: list[TestClass]) -> None:
         if id(test) in visiting:
             return
         visiting = visiting | {id(test)}
+        inherited = False
         for name in test.bases:
             candidates = by_name.get(name, [])
             local = [base for base in candidates if base.module == test.module]
             candidates = local or candidates
             if len(candidates) != 1:
                 continue
+            inherited = True
             parent = candidates[0]
             visit(parent, visiting)
             test.methods.update(parent.methods)
             test.tags.update(parent.tags)
+        if not inherited:
+            test.tags.update(("standard", "at_install"))
         test.tags.difference_update(test.removed_tags)
 
     for test in tests:
@@ -117,13 +122,21 @@ def resolve_inheritance(tests: list[TestClass]) -> None:
 
 
 def reference_codes(root: str, model: str, field: str = "code") -> list[str]:
-    path = Path(root) / "odoo/addons/base/data" / f"res_{model}_data.xml"
+    directory = Path(root) / "odoo/addons/base/data"
+    csv_path = directory / f"res.{model}.csv"
+    if csv_path.exists():
+        with csv_path.open(newline="", encoding="utf-8") as stream:
+            return sorted({row[field] for row in csv.DictReader(stream) if row.get(field)})
+    path = directory / f"res_{model}_data.xml"
     try:
         document = ET.parse(path)
     except (OSError, ET.ParseError):
         return []
     selector = f".//record[@model='res.{model}']/field[@name='{field}']"
-    return sorted({node.text for node in document.findall(selector) if node.text})
+    codes = {node.text for node in document.findall(selector) if node.text}
+    if model == "country":
+        codes = {code.upper() for code in codes}
+    return sorted(codes)
 
 
 def build_index(addons: list[str], root: str) -> dict:

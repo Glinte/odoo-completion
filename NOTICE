@@ -1,0 +1,7 @@
+The original implementation of odoo-completion is licensed under the MIT License.
+
+src/odoo_completion/data/odoo20.json contains generated command metadata and help
+text from Odoo (https://github.com/odoo/odoo), copyright Odoo S.A. and contributors.
+The snapshot's revision field identifies its exact source revision. That upstream
+material remains under Odoo's applicable LGPL-3.0 license; the MIT license does
+not relicense it. See LICENSE-ODOO and COPYRIGHT-ODOO, copied from that upstream distribution.

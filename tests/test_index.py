@@ -18,3 +18,18 @@ class TestDemo(Base):
     child = next(test for test in index["tests"] if test["class"] == "TestDemo")
     assert child["methods"] == ["test_inherited", "test_local"]
     assert child["tags"] == ["post_install", "standard"]
+
+
+def test_inherited_removed_tags_are_not_reintroduced(tmp_path):
+    module = tmp_path / "demo"
+    (module / "tests").mkdir(parents=True)
+    (module / "__manifest__.py").touch()
+    (module / "tests/test_demo.py").write_text("""
+@tagged('-at_install', 'post_install')
+class Base:
+    def test_example(self): pass
+class Child(Base): pass
+""")
+    index = build_index([str(tmp_path)], str(tmp_path))
+    child = next(test for test in index["tests"] if test["class"] == "Child")
+    assert child["tags"] == ["post_install", "standard"]

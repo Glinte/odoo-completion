@@ -90,6 +90,16 @@ def test_worker_cache_and_secret_handling(postgres, tmp_path, monkeypatch):
         "db_password": "do-not-cache-this",
         "db_name": "postgres",
     }
+    # Exercise worker transport without coupling success to CI machine load.
+    # The separate deadline test verifies the production 300 ms limit.
+    real_run = database.subprocess.run
+
+    def allow_slow_test_machine(*args, **kwargs):
+        assert kwargs["timeout"] == 0.3
+        kwargs["timeout"] = 3
+        return real_run(*args, **kwargs)
+
+    monkeypatch.setattr(database.subprocess, "run", allow_slow_test_machine)
     assert "completion_example" in database.candidates("database", config)
     assert database.candidates("installed_module", config) == ["sale"]
     monkeypatch.setattr(database.subprocess, "run", lambda *a, **kw: pytest.fail("cache miss"))

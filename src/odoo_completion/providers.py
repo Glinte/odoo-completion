@@ -101,7 +101,8 @@ def test_selectors(prefix: str, schema: dict, config: dict) -> list[Candidate]:
     previous, selector = prefix[: last_comma + 1], prefix[last_comma + 1 :]
     sign = selector[:1] if selector.startswith(("-", "+")) else ""
     selector = selector[len(sign) :]
-    tests = source_index(schema).get("tests", [])
+    modules = set(available_modules(config))
+    tests = [test for test in source_index(schema).get("tests", []) if test["module"] in modules]
     values = set()
     if ":" in selector:
         scope, class_method = selector.split(":", 1)
@@ -120,11 +121,29 @@ def test_selectors(prefix: str, schema: dict, config: dict) -> list[Candidate]:
         else:
             values.update(f"{scope}:{t['class']}" for t in matching)
     elif "/" in selector:
-        tag, module_or_file = selector.split("/", 1)
-        values.update(f"{tag}/{module}" for module in available_modules(config))
-        values.update(f"{tag}/{t['file']}" for t in tests)
+        tag, scope = selector.split("/", 1)
+        if ".py." in scope:
+            filename = scope.split(".py.", 1)[0] + ".py"
+            values.update(
+                f"{tag}/{filename}.{method}"
+                for test in tests
+                if test["file"] == filename
+                for method in test["methods"]
+            )
+        elif "." in scope and "/" not in scope:
+            module = scope.partition(".")[0]
+            values.update(
+                f"{tag}/{module}.{method}"
+                for test in tests
+                if test["module"] == module
+                for method in test["methods"]
+            )
+        else:
+            values.update(f"{tag}/{module}" for module in modules)
+            values.update(f"{tag}/{test['file']}" for test in tests)
     elif "." in selector:
-        values.update("." + method for t in tests for method in t["methods"])
+        tag = selector.partition(".")[0]
+        values.update(f"{tag}.{method}" for test in tests for method in test["methods"])
     else:
         values.update(("standard", "at_install", "post_install", "*", "/"))
         values.update(tag for test in tests for tag in test["tags"])

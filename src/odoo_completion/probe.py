@@ -74,6 +74,15 @@ def describe(parser):
                 "repeat": isinstance(action, (argparse._AppendAction, argparse._CountAction)),
                 "type": getattr(action.type, "__name__", ""),
             }
+            item["exclusive_with"] = sorted(
+                {
+                    other.dest
+                    for group in parser._mutually_exclusive_groups
+                    if action in group._group_actions
+                    for other in group._group_actions
+                    if other is not action
+                }
+            )
             result["options" if action.option_strings else "positionals"].append(item)
     else:
         for option in parser.option_list + [o for g in parser.option_groups for o in g.option_list]:
@@ -133,16 +142,19 @@ def run(request):
             )
             if k in config.options
         }
+        defaults["addons_path"] = []  # registration paths are discovery scope, not runtime config
         defaults["db_password"] = ""  # never serialize secrets
         env = {k: v.env_name for k, v in config.options_index.items() if v.env_name}
         commands = {}
         for path in sorted((root / "odoo" / "cli").glob("*.py")):
             if path.stem not in ("__init__", "command"):
                 commands[path.stem] = str(path)
+        core_commands = set(commands)
         for directory in odoo.addons.__path__:
             for path in sorted(Path(directory).glob("*/cli/*.py")):
                 if path.stem != "__init__" and command.Command.is_valid_name(path.stem):
-                    commands.setdefault(path.stem, str(path))
+                    if path.stem not in core_commands:
+                        commands[path.stem] = str(path)
         return {
             "commands": commands,
             "defaults": defaults,

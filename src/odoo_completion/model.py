@@ -15,6 +15,11 @@ class Argument(TypedDict):
     env: NotRequired[str]
     provider: NotRequired[str]
     reason: NotRequired[str]
+    allow_all: NotRequired[bool]
+    allow_files: NotRequired[bool]
+    allow_pot: NotRequired[bool]
+    argv: NotRequired[list[str]]
+    exclusive_with: NotRequired[list[str]]
 
 
 class Command(TypedDict):

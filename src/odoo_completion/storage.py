@@ -63,7 +63,10 @@ def select(command, cwd):
 
 
 def schema_path(entry):
-    return cache_dir() / (identity([entry["root"], entry["python"]]) + ".json")
+    return cache_dir() / (
+        identity([entry["root"], entry["python"], entry.get("addons", []), entry.get("overrides")])
+        + ".json"
+    )
 
 
 def load_schema(entry):

@@ -45,3 +45,13 @@ def test_new_database_is_unrestricted():
     node = describe(parser)
     classify(node, ("db", "init"))
     assert node["positionals"][0]["provider"] == "text"
+
+
+def test_mutually_exclusive_arguments_are_recorded():
+    parser = argparse.ArgumentParser()
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--script")
+    group.add_argument("--from", dest="from_version")
+    node = describe(parser)
+    script = next(item for item in node["options"] if item["dest"] == "script")
+    assert script["exclusive_with"] == ["from_version"]

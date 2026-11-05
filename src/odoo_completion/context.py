@@ -1,6 +1,7 @@
 """Parse incomplete command lines without executing shell expansions."""
 
 import os
+import sys
 from dataclasses import dataclass, field
 
 
@@ -167,7 +168,10 @@ def effective_config(schema, ctx, cwd):
     result = dict(schema.get("defaults", {}))
     home = Path.home()
     config_home = Path(os.environ.get("XDG_CONFIG_HOME", home / ".config"))
-    candidates = [config_home / "odoo/odoo.conf", home / ".odoorc", home / ".openerp_serverrc"]
+    application_config = config_home / "Odoo/odoo.conf"
+    if sys.platform == "darwin":
+        application_config = home / "Library/Application Support/Odoo/odoo.conf"
+    candidates = [application_config, home / ".odoorc", home / ".openerp_serverrc"]
     default = next((p for p in candidates if p.exists()), candidates[0])
     filename = (
         ctx.values.get("config")
@@ -208,7 +212,7 @@ def effective_config(schema, ctx, cwd):
     result["addons_path"] = list(
         dict.fromkeys(
             str((Path(cwd) / os.path.expandvars(os.path.expanduser(str(p)))).resolve())
-            for p in [*builtin, *paths]
+            for p in [*builtin[:-1], *paths, *builtin[-1:]]
             if p
         )
     )

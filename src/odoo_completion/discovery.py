@@ -227,6 +227,7 @@ def refresh(entry, progress=None):
     schema = {
         "protocol": 1,
         "commands": commands,
+        "command_sources": base["commands"],
         "errors": errors,
         "version": base["version"],
         "defaults": base["defaults"],

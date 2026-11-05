@@ -1,5 +1,7 @@
 """Shell-independent candidate selection for an incomplete Odoo command."""
 
+from pathlib import Path
+
 from .context import effective_config, parse, tokenize
 from .model import Candidate, candidate
 from .providers import complete_value
@@ -24,7 +26,8 @@ def option_candidates(context, prefix: str) -> list[Candidate]:
     return [
         candidate(flag, argument["help"])
         for argument in context.node["options"]
-        if not argument.get("hidden")
+        if not set(argument.get("exclusive_with", [])).intersection(context.used)
+        and not argument.get("hidden")
         and (argument.get("repeat") or argument["dest"] not in context.used)
         for flag in argument["flags"]
         if flag.startswith(prefix)
@@ -36,6 +39,9 @@ def complete(schema: dict, words: list[str], prefix: str, cwd: str) -> list[Cand
     if context.invalid:
         return []
     config = effective_config(schema, context, cwd)
+    available = available_commands(schema, config)
+    if context.path[0] not in available:
+        return []
     pending = context.pending
     if pending is not None:
         flexible = context.remaining in ("?", "*", "+")
@@ -58,7 +64,7 @@ def complete(schema: dict, words: list[str], prefix: str, cwd: str) -> list[Cand
     if context.choosing:
         results.extend(
             candidate(name, node["help"])
-            for name, node in schema["commands"].items()
+            for name, node in available.items()
             if name.startswith(prefix)
         )
     results.extend(
@@ -82,10 +88,7 @@ def complete(schema: dict, words: list[str], prefix: str, cwd: str) -> list[Cand
 def complete_line(
     line: str, point: int, cwd: str, shell: str = "bash", word: str | None = None
 ) -> list[Candidate]:
-    if shell == "bash":
-        line = line.encode()[:point].decode(errors="ignore")
-    else:
-        line = line[:point]
+    line = line[:point]
     words, prefix = tokenize(line)
     if not words:
         return []
@@ -94,19 +97,46 @@ def complete_line(
     if not schema.get("commands"):
         return []
     results = complete(schema, words[1:], prefix, cwd)
-    # Bash treats '=' and ':' as word boundaries even inside an Odoo value.
-    trim = ""
-    if shell == "bash" and word is not None and prefix.endswith(word) and word != prefix:
-        candidate_trim = prefix[: len(prefix) - len(word)] if word else prefix
-        if candidate_trim.endswith(("=", ":")):
-            trim = candidate_trim
+    # Readline replaces only the part before the cursor, and breaks at '=' and
+    # ':'. Preserve any existing suffix rather than duplicating it on insertion.
+    trim, suffix = "", ""
+    if shell == "bash" and word is not None:
+        word = word.strip("\"'")
+        if word in ("=", ":") and prefix.endswith(word):
+            word = ""
+        boundaries = [0] + [i + 1 for i, char in enumerate(prefix) if char in "=:"]
+        for boundary in boundaries:
+            fragment = prefix[boundary:]
+            if word.startswith(fragment):
+                trim, suffix = prefix[:boundary], word[len(fragment) :]
+                break
     unique = {}
     for item in results:
         value = item["value"]
         if trim and value.startswith(trim):
             value = value[len(trim) :]
+        if suffix:
+            if not value.endswith(suffix):
+                continue
+            value = value[: -len(suffix)]
+            item = {**item, "kind": "nospace"}
         if any(char in value for char in "\t\n\r\x00"):
             continue
         description = " ".join(item["description"].split())
         unique[value] = {**item, "value": value, "description": description}
     return [unique[value] for value in sorted(unique)]
+
+
+def available_commands(schema: dict, config: dict) -> dict:
+    """Do not offer addon commands outside this invocation's search path."""
+    sources = schema.get("command_sources", {})
+    core = Path(schema.get("root", ".")) / "odoo/cli"
+    addon_paths = {Path(path).resolve() for path in config.get("addons_path", [])}
+    result = {}
+    for name, node in schema["commands"].items():
+        source = sources.get(name)
+        if source is None or Path(source).parent == core:
+            result[name] = node
+        elif Path(source).parent.parent.parent.resolve() in addon_paths:
+            result[name] = node
+    return result
