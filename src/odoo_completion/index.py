@@ -116,13 +116,13 @@ def resolve_inheritance(tests: list[TestClass]) -> None:
         visit(test, set())
 
 
-def reference_codes(root: str, model: str) -> list[str]:
+def reference_codes(root: str, model: str, field: str = "code") -> list[str]:
     path = Path(root) / "odoo/addons/base/data" / f"res_{model}_data.xml"
     try:
         document = ET.parse(path)
     except (OSError, ET.ParseError):
         return []
-    selector = f".//record[@model='res.{model}']/field[@name='code']"
+    selector = f".//record[@model='res.{model}']/field[@name='{field}']"
     return sorted({node.text for node in document.findall(selector) if node.text})
 
 
@@ -148,4 +148,5 @@ def build_index(addons: list[str], root: str) -> dict:
         "models": sorted(models),
         "language": reference_codes(root, "lang"),
         "country": reference_codes(root, "country"),
+        "iso_language": reference_codes(root, "lang", "iso_code"),
     }

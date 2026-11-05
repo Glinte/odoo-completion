@@ -26,6 +26,7 @@ PROVIDERS = {
     "database": "database",
     "db_template": "database",
     "db_system": "database",
+    "db_sslmode": "sslmode",
     "log_db": "database",
     "modules": "module",
     "language": "language",
@@ -62,10 +63,13 @@ PROVIDERS = {
     "geoip_country_db": "file",
     "from_version": "version",
     "to_version": "version",
-    "script": "file",
+    "script": "upgrade_script",
+    "dump_path": "file",
+    "files": "file",
 }
 CHOICES = {
-    "dev": ["all", "xml", "reload", "qweb", "werkzeug", "replica"],
+    "sslmode": ["disable", "allow", "prefer", "require", "verify-ca", "verify-full"],
+    "dev": ["all", "xml", "reload", "qweb", "access", "replica"],
     "shell": ["ipython", "ptpython", "bpython", "python"],
     "log_level": ["debug", "info", "warning", "error", "critical"],
 }
@@ -75,6 +79,10 @@ def classify(node, path=()):
     for item in node["options"] + node["positionals"]:
         dest = item["dest"]
         provider = "none" if item["nargs"] == 0 else PROVIDERS.get(dest, "text")
+        if "--without-demo" in item["flags"]:
+            item["choices"] = ["True", "False"]
+        if dest == "job_runners":
+            item["choices"] = ["auto"]
         if item["choices"]:
             provider = "choices"
         elif item.get("type") == "path" and provider == "text":
@@ -93,6 +101,16 @@ def classify(node, path=()):
             provider = "installed_module"
         if dest == "modules" and path[:2] == ("i18n", "export"):
             provider = "module"
+        if provider == "databases" and item.get("type") != "comma":
+            provider = "database"
+        if provider == "language" and path[:1] == ("i18n",):
+            provider = "iso_language"
+        item["allow_all"] = dest in ("init", "update", "reinit") or path[:2] == (
+            "module",
+            "upgrade",
+        )
+        item["allow_files"] = dest == "modules" and path[:2] == ("module", "install")
+        item["allow_pot"] = path[:2] == ("i18n", "export")
         if provider in CHOICES:
             item["choices"] = CHOICES[provider]
         item["provider"] = provider
@@ -142,24 +160,39 @@ def apply_overrides(schema, filename):
     if not filename:
         return
     data = tomllib.loads(Path(filename).read_text())
+    for name, node in data.get("command", {}).items():
+        classify(node, (name,))
+        schema["commands"][name] = node
+        schema["errors"].pop(name, None)
     for override in data.get("argument", []):
         parts = override["command"].split()
         node = schema["commands"][parts[0]]
         for part in parts[1:]:
             node = node["children"][part]
-        item = next(
-            x for x in node["options"] + node["positionals"] if x["dest"] == override["dest"]
-        )
+        matches = [
+            item
+            for item in node["options"] + node["positionals"]
+            if item["dest"] == override["dest"]
+        ]
+        if not matches:
+            raise ValueError(
+                f"Override argument not found: {override['command']} {override['dest']}"
+            )
+        item = matches[0]
         if "choices" in override:
             item.update(provider="choices", choices=override["choices"])
         if "provider" in override:
             item["provider"] = override["provider"]
+        if "argv" in override:
+            argv = override["argv"]
+            if (
+                not isinstance(argv, list)
+                or not argv
+                or not all(isinstance(arg, str) for arg in argv)
+            ):
+                raise ValueError("Override argv must be a nonempty string array")
+            item.update(provider="external", argv=argv)
         item["reason"] = "Explicit override"
-    for name, node in data.get("command", {}).items():
-        # Complete replacement schemas use the same JSON-compatible node format.
-        classify(node, (name,))
-        schema["commands"][name] = node
-        schema["errors"].pop(name, None)
 
 
 def refresh(entry, progress=None):
@@ -199,10 +232,10 @@ def refresh(entry, progress=None):
         "defaults": base["defaults"],
         "env": base["env"],
         "addons": base["addons"],
-        "sources": fingerprint(tracked),
+        "sources": fingerprint(tracked + [str(Path(p).parent) for p in tracked] + base["addons"]),
         "updated": time.time(),
         "root": entry["root"],
-        "index": build_index(base["addons"], entry["root"]),
+        "index_file": str(schema_path(entry).with_suffix(".index.json")),
     }
     try:
         schema["revision"] = subprocess.check_output(
@@ -215,6 +248,7 @@ def refresh(entry, progress=None):
     apply_overrides(schema, entry.get("overrides"))
     if not commands:
         raise RuntimeError("No parsers captured; previous metadata retained")
+    write_json(schema["index_file"], build_index(base["addons"], entry["root"]))
     write_json(schema_path(entry), schema)
     return schema
 
