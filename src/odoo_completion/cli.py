@@ -13,7 +13,11 @@ from .storage import config_dir, executable, load_schema, registrations, schema_
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(description=__doc__)
     result.add_argument("--version", action="version", version=__version__)
-    commands = result.add_subparsers(dest="action", required=True)
+    commands = result.add_subparsers(
+        dest="action",
+        required=True,
+        metavar="{register,refresh,init,install,uninstall,doctor,coverage}",
+    )
     register = commands.add_parser("register", help="Register a checkout and discover its CLI")
     register.add_argument("--command", required=True)
     register.add_argument("--odoo-root", type=Path, required=True)
@@ -34,7 +38,7 @@ def parser() -> argparse.ArgumentParser:
     )
     coverage.add_argument("--command", default="odoo-bin")
     coverage.add_argument("--json", action="store_true")
-    complete = commands.add_parser("_complete", help=argparse.SUPPRESS)
+    complete = commands.add_parser("_complete")
     complete.add_argument("--shell", choices=("bash", "zsh", "fish", "json"), required=True)
     complete.add_argument("--line", required=True)
     complete.add_argument("--point", type=int, required=True)

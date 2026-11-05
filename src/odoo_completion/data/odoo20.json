@@ -10,6 +10,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "help",
+          "exclusive_with": [],
           "flags": [
             "-h",
             "--help"
@@ -28,6 +29,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "database",
+          "exclusive_with": [],
           "flags": [
             "--database",
             "-d"
@@ -46,6 +48,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "path",
+          "exclusive_with": [],
           "flags": [
             "--path",
             "-p"
@@ -64,6 +67,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "verbose",
+          "exclusive_with": [],
           "flags": [
             "--verbose",
             "-v"
@@ -1599,6 +1603,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -1619,6 +1624,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "database",
+              "exclusive_with": [],
               "flags": [],
               "help": "database to delete",
               "hidden": false,
@@ -1640,6 +1646,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -1661,6 +1668,7 @@
                 "dump"
               ],
               "dest": "dump_format",
+              "exclusive_with": [],
               "flags": [
                 "--format"
               ],
@@ -1678,6 +1686,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "filestore",
+              "exclusive_with": [],
               "flags": [
                 "--no-filestore"
               ],
@@ -1697,6 +1706,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "database",
+              "exclusive_with": [],
               "flags": [],
               "help": "database to dump",
               "hidden": false,
@@ -1712,6 +1722,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "dump_path",
+              "exclusive_with": [],
               "flags": [],
               "help": "if provided, database is dumped to specified path, otherwise or if `-`, dumped to stdout",
               "hidden": false,
@@ -1733,6 +1744,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -1751,6 +1763,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "force",
+              "exclusive_with": [],
               "flags": [
                 "-f",
                 "--force"
@@ -1769,6 +1782,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "neutralize",
+              "exclusive_with": [],
               "flags": [
                 "-n",
                 "--neutralize"
@@ -1789,6 +1803,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "source",
+              "exclusive_with": [],
               "flags": [],
               "help": "",
               "hidden": false,
@@ -1804,6 +1819,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "target",
+              "exclusive_with": [],
               "flags": [],
               "help": "database to copy `source` to, must not exist unless `-f` is specified in which case it will be dropped first",
               "hidden": false,
@@ -1825,6 +1841,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -1843,6 +1860,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "with_demo",
+              "exclusive_with": [],
               "flags": [
                 "--with-demo"
               ],
@@ -1860,6 +1878,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "force",
+              "exclusive_with": [],
               "flags": [
                 "--force"
               ],
@@ -1877,6 +1896,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "language",
+              "exclusive_with": [],
               "flags": [
                 "--language"
               ],
@@ -1894,6 +1914,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "username",
+              "exclusive_with": [],
               "flags": [
                 "--username"
               ],
@@ -1911,6 +1932,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "password",
+              "exclusive_with": [],
               "flags": [
                 "--password"
               ],
@@ -1928,6 +1950,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "country",
+              "exclusive_with": [],
               "flags": [
                 "--country"
               ],
@@ -1947,6 +1970,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "database",
+              "exclusive_with": [],
               "flags": [],
               "help": "database to create",
               "hidden": false,
@@ -1968,6 +1992,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -1986,6 +2011,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "force",
+              "exclusive_with": [],
               "flags": [
                 "-f",
                 "--force"
@@ -2004,6 +2030,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "neutralize",
+              "exclusive_with": [],
               "flags": [
                 "-n",
                 "--neutralize"
@@ -2022,6 +2049,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "copy",
+              "exclusive_with": [],
               "flags": [
                 "--move"
               ],
@@ -2041,6 +2069,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "database",
+              "exclusive_with": [],
               "flags": [],
               "help": "database to create, defaults to dump file's name (without extension)",
               "hidden": false,
@@ -2056,6 +2085,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "dump_file",
+              "exclusive_with": [],
               "flags": [],
               "help": "zip or pg_dump file to load",
               "hidden": false,
@@ -2077,6 +2107,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -2095,6 +2126,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "force",
+              "exclusive_with": [],
               "flags": [
                 "-f",
                 "--force"
@@ -2115,6 +2147,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "source",
+              "exclusive_with": [],
               "flags": [],
               "help": "",
               "hidden": false,
@@ -2130,6 +2163,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "target",
+              "exclusive_with": [],
               "flags": [],
               "help": "database to rename `source` to, must not exist unless `-f` is specified, in which case it will be dropped first",
               "hidden": false,
@@ -2150,6 +2184,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "help",
+          "exclusive_with": [],
           "flags": [
             "-h",
             "--help"
@@ -2168,6 +2203,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "config",
+          "exclusive_with": [],
           "flags": [
             "-c",
             "--config"
@@ -2186,6 +2222,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "data_dir",
+          "exclusive_with": [],
           "flags": [
             "-D",
             "--data-dir"
@@ -2204,6 +2241,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "addons_path",
+          "exclusive_with": [],
           "flags": [
             "--addons-path"
           ],
@@ -2221,6 +2259,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "db_user",
+          "exclusive_with": [],
           "flags": [
             "-r",
             "--db_user"
@@ -2239,6 +2278,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "db_password",
+          "exclusive_with": [],
           "flags": [
             "-w",
             "--db_password"
@@ -2257,6 +2297,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "pg_path",
+          "exclusive_with": [],
           "flags": [
             "--pg_path"
           ],
@@ -2274,6 +2315,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "db_host",
+          "exclusive_with": [],
           "flags": [
             "--db_host"
           ],
@@ -2291,6 +2333,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "db_port",
+          "exclusive_with": [],
           "flags": [
             "--db_port"
           ],
@@ -2315,6 +2358,7 @@
             "verify-full"
           ],
           "dest": "db_sslmode",
+          "exclusive_with": [],
           "flags": [
             "--db_sslmode"
           ],
@@ -2339,6 +2383,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "help",
+          "exclusive_with": [],
           "flags": [
             "-h",
             "--help"
@@ -2357,6 +2402,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "db",
+          "exclusive_with": [],
           "flags": [
             "--db"
           ],
@@ -2374,6 +2420,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "login",
+          "exclusive_with": [],
           "flags": [
             "--login"
           ],
@@ -2391,6 +2438,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "password",
+          "exclusive_with": [],
           "flags": [
             "--password"
           ],
@@ -2408,6 +2456,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "verify_ssl",
+          "exclusive_with": [],
           "flags": [
             "--verify-ssl"
           ],
@@ -2425,6 +2474,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "force",
+          "exclusive_with": [],
           "flags": [
             "--force"
           ],
@@ -2444,6 +2494,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "path",
+          "exclusive_with": [],
           "flags": [],
           "help": "Path of the module to deploy",
           "hidden": false,
@@ -2459,6 +2510,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "url",
+          "exclusive_with": [],
           "flags": [],
           "help": "Url of the server (default=http://localhost:8069)",
           "hidden": false,
@@ -4114,6 +4166,7 @@
               "allow_pot": true,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -4132,6 +4185,7 @@
               "allow_pot": true,
               "choices": [],
               "dest": "config",
+              "exclusive_with": [],
               "flags": [
                 "-c",
                 "--config"
@@ -4150,6 +4204,7 @@
               "allow_pot": true,
               "choices": [],
               "dest": "db_name",
+              "exclusive_with": [],
               "flags": [
                 "-d",
                 "--database"
@@ -4168,6 +4223,7 @@
               "allow_pot": true,
               "choices": [],
               "dest": "languages",
+              "exclusive_with": [],
               "flags": [
                 "-l",
                 "--languages"
@@ -4186,6 +4242,7 @@
               "allow_pot": true,
               "choices": [],
               "dest": "output",
+              "exclusive_with": [],
               "flags": [
                 "-o",
                 "--output"
@@ -4206,6 +4263,7 @@
               "allow_pot": true,
               "choices": [],
               "dest": "modules",
+              "exclusive_with": [],
               "flags": [],
               "help": "modules to be exported",
               "hidden": false,
@@ -4227,6 +4285,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -4245,6 +4304,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "config",
+              "exclusive_with": [],
               "flags": [
                 "-c",
                 "--config"
@@ -4263,6 +4323,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "db_name",
+              "exclusive_with": [],
               "flags": [
                 "-d",
                 "--database"
@@ -4281,6 +4342,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "overwrite",
+              "exclusive_with": [],
               "flags": [
                 "-w",
                 "--overwrite"
@@ -4299,6 +4361,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "language",
+              "exclusive_with": [],
               "flags": [
                 "-l",
                 "--language"
@@ -4319,6 +4382,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "files",
+              "exclusive_with": [],
               "flags": [],
               "help": "files to be imported. Allowed extensions: .po, .csv\n",
               "hidden": false,
@@ -4340,6 +4404,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -4358,6 +4423,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "config",
+              "exclusive_with": [],
               "flags": [
                 "-c",
                 "--config"
@@ -4376,6 +4442,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "db_name",
+              "exclusive_with": [],
               "flags": [
                 "-d",
                 "--database"
@@ -4394,6 +4461,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "languages",
+              "exclusive_with": [],
               "flags": [
                 "-l",
                 "--languages"
@@ -4418,6 +4486,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "help",
+          "exclusive_with": [],
           "flags": [
             "-h",
             "--help"
@@ -4445,6 +4514,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -4463,6 +4533,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "config",
+              "exclusive_with": [],
               "flags": [
                 "-c",
                 "--config"
@@ -4481,6 +4552,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "db_name",
+              "exclusive_with": [],
               "flags": [
                 "-d",
                 "--database"
@@ -4499,6 +4571,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "data_dir",
+              "exclusive_with": [],
               "flags": [
                 "-D",
                 "--data-dir"
@@ -4524,6 +4597,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -4542,6 +4616,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "config",
+              "exclusive_with": [],
               "flags": [
                 "-c",
                 "--config"
@@ -4560,6 +4635,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "db_name",
+              "exclusive_with": [],
               "flags": [
                 "-d",
                 "--database"
@@ -4578,6 +4654,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "data_dir",
+              "exclusive_with": [],
               "flags": [
                 "-D",
                 "--data-dir"
@@ -4596,6 +4673,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "dry_run",
+              "exclusive_with": [],
               "flags": [
                 "-n",
                 "--dry-run"
@@ -4616,6 +4694,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "modules",
+              "exclusive_with": [],
               "flags": [],
               "help": "names of the modules to be installed. For data modules (.zip), use the path instead",
               "hidden": false,
@@ -4637,6 +4716,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -4655,6 +4735,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "config",
+              "exclusive_with": [],
               "flags": [
                 "-c",
                 "--config"
@@ -4673,6 +4754,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "db_name",
+              "exclusive_with": [],
               "flags": [
                 "-d",
                 "--database"
@@ -4691,6 +4773,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "data_dir",
+              "exclusive_with": [],
               "flags": [
                 "-D",
                 "--data-dir"
@@ -4716,6 +4799,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -4734,6 +4818,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "config",
+              "exclusive_with": [],
               "flags": [
                 "-c",
                 "--config"
@@ -4752,6 +4837,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "db_name",
+              "exclusive_with": [],
               "flags": [
                 "-d",
                 "--database"
@@ -4770,6 +4856,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "data_dir",
+              "exclusive_with": [],
               "flags": [
                 "-D",
                 "--data-dir"
@@ -4788,6 +4875,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "dry_run",
+              "exclusive_with": [],
               "flags": [
                 "-n",
                 "--dry-run"
@@ -4808,6 +4896,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "modules",
+              "exclusive_with": [],
               "flags": [],
               "help": "names of the modules to be uninstalled",
               "hidden": false,
@@ -4829,6 +4918,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "help",
+              "exclusive_with": [],
               "flags": [
                 "-h",
                 "--help"
@@ -4847,6 +4937,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "config",
+              "exclusive_with": [],
               "flags": [
                 "-c",
                 "--config"
@@ -4865,6 +4956,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "db_name",
+              "exclusive_with": [],
               "flags": [
                 "-d",
                 "--database"
@@ -4883,6 +4975,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "data_dir",
+              "exclusive_with": [],
               "flags": [
                 "-D",
                 "--data-dir"
@@ -4901,6 +4994,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "dry_run",
+              "exclusive_with": [],
               "flags": [
                 "-n",
                 "--dry-run"
@@ -4919,6 +5013,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "outdated",
+              "exclusive_with": [],
               "flags": [
                 "--outdated"
               ],
@@ -4938,6 +5033,7 @@
               "allow_pot": false,
               "choices": [],
               "dest": "modules",
+              "exclusive_with": [],
               "flags": [],
               "help": "name of the modules to be upgraded, use 'base' or 'all' if you want to upgrade everything",
               "hidden": false,
@@ -4958,6 +5054,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "help",
+          "exclusive_with": [],
           "flags": [
             "-h",
             "--help"
@@ -8308,6 +8405,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "help",
+          "exclusive_with": [],
           "flags": [
             "-h",
             "--help"
@@ -8326,6 +8424,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "template",
+          "exclusive_with": [],
           "flags": [
             "-t",
             "--template"
@@ -8346,6 +8445,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "name",
+          "exclusive_with": [],
           "flags": [],
           "help": "Name of the module to create",
           "hidden": false,
@@ -8361,6 +8461,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "dest",
+          "exclusive_with": [],
           "flags": [],
           "help": "Directory to create the module in (default: %(default)s)",
           "hidden": false,
@@ -11567,6 +11668,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "help",
+          "exclusive_with": [],
           "flags": [
             "-h",
             "--help"
@@ -11585,6 +11687,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "path",
+          "exclusive_with": [],
           "flags": [
             "--path"
           ],
@@ -11602,6 +11705,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "db_name",
+          "exclusive_with": [],
           "flags": [
             "-d",
             "--database"
@@ -13154,6 +13258,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "help",
+          "exclusive_with": [],
           "flags": [
             "-h",
             "--help"
@@ -13172,6 +13277,9 @@
           "allow_pot": false,
           "choices": [],
           "dest": "script",
+          "exclusive_with": [
+            "from_version"
+          ],
           "flags": [
             "--script"
           ],
@@ -13189,6 +13297,9 @@
           "allow_pot": false,
           "choices": [],
           "dest": "from_version",
+          "exclusive_with": [
+            "script"
+          ],
           "flags": [
             "--from"
           ],
@@ -13206,6 +13317,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "to_version",
+          "exclusive_with": [],
           "flags": [
             "--to"
           ],
@@ -13223,6 +13335,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "glob",
+          "exclusive_with": [],
           "flags": [
             "--glob"
           ],
@@ -13240,6 +13353,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "dry_run",
+          "exclusive_with": [],
           "flags": [
             "--dry-run"
           ],
@@ -13257,6 +13371,7 @@
           "allow_pot": false,
           "choices": [],
           "dest": "addons_path",
+          "exclusive_with": [],
           "flags": [
             "--addons-path"
           ],

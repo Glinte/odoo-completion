@@ -88,3 +88,9 @@ def test_custom_wrappers_register_their_command_name(shell, tmp_path, monkeypatc
         line.endswith(" my-odoo") or "-c my-odoo " in line
         for line in integration.render(shell).splitlines()
     )
+
+
+def test_public_help_does_not_show_internal_protocol():
+    from odoo_completion.cli import parser
+
+    assert "_complete" not in parser().format_help()

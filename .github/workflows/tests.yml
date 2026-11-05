@@ -1,0 +1,60 @@
+name: tests
+on: [push, pull_request]
+permissions:
+  contents: read
+
+jobs:
+  shells:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: '3.12'
+          - os: ubuntu-latest
+            python: '3.14'
+          - os: macos-latest
+            python: '3.12'
+    runs-on: ${{ matrix.os }}
+    env:
+      TMPDIR: /tmp
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y zsh fish postgresql
+      - if: runner.os == 'macOS'
+        run: |
+          brew install bash fish postgresql@17
+          echo "$(brew --prefix postgresql@17)/bin" >> "$GITHUB_PATH"
+      - run: uv sync --locked
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest
+      - run: uv build
+
+  odoo:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ref: ['20.0', master]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: odoo/odoo
+          ref: ${{ matrix.ref }}
+          path: upstream
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y libldap2-dev libsasl2-dev libpq-dev libxml2-dev libxslt1-dev
+      - run: |
+          uv sync --locked
+          uv venv /tmp/odoo-completion-runtime --python 3.12
+          uv pip install --python /tmp/odoo-completion-runtime/bin/python -r upstream/requirements.txt
+      - run: uv run pytest tests/test_odoo.py
+        env:
+          ODOO_TEST_ROOT: ${{ github.workspace }}/upstream
+          ODOO_TEST_PYTHON: /tmp/odoo-completion-runtime/bin/python
