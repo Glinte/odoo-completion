@@ -18,6 +18,9 @@ odoo-completion = "odoo_completion.cli:main"
 [dependency-groups]
 dev = ["pytest>=8", "pexpect>=4.9", "ruff>=0.9"]
 
+[tool.uv]
+exclude-newer = "P14D"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 
